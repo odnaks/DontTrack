@@ -16,6 +16,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var playImage: UIImageView!
     @IBOutlet weak var stopImage: UIImageView!
     
+    var polyline: GMSPolyline?
+    var path: GMSMutablePath?
+    
     var isRunning: Bool = false
     
     override func viewDidLoad() {
@@ -53,6 +56,12 @@ class ViewController: UIViewController {
     
     private func start() {
         locationManager?.startUpdatingLocation()
+        polyline?.map = nil
+        polyline = GMSPolyline()
+        polyline?.strokeWidth = 5
+        polyline?.strokeColor = .red
+        polyline?.map = mapView
+        path = GMSMutablePath()
     }
     
     private func stop() {
@@ -80,10 +89,14 @@ class ViewController: UIViewController {
 extension ViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
-        guard let location = locations.first else {return}
+        guard let location = locations.last else {return}
+        
+        path?.add(location.coordinate)
+        polyline?.path = path
         
         let camera = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 15)
-        mapView.camera = camera
-        addMarker(coordinate: location.coordinate)
+//        mapView.camera = camera
+//        addMarker(coordinate: location.coordinate)
+        mapView.animate(to: camera)
     }
 }
