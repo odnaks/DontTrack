@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var mapView: GMSMapView!
     
     private var locationManager: CLLocationManager?
+    private var previousPath: GMSMutablePath?
     
     @IBOutlet weak var playImage: UIImageView!
     @IBOutlet weak var stopImage: UIImageView!
@@ -27,6 +28,17 @@ class ViewController: UIViewController {
         
         configureLocationManager()
         locationManager?.delegate = self
+        
+        do {
+            let realm = try Realm()
+            print(realm.configuration.fileURL)
+            let path = realm.objects(PathEntity.self)
+            if !path.isEmpty, let encodePath = path[0].encodedPath {
+                previousPath = GMSMutablePath(fromEncodedPath: encodePath)
+            }
+        } catch {
+            print(error)
+        }
         
         updateButton()
     }
@@ -55,8 +67,31 @@ class ViewController: UIViewController {
         updateButton()
     }
     
+    @IBAction func clickPreviousPath(_ sender: Any) {
+        if isRunning {
+            let alert = UIAlertController(title: "Закончить трек?", message: "Чтобы посмотреть предыдущий трек, необходимо завершить текущий.", preferredStyle: .alert)
+
+            alert.addAction(UIAlertAction(title: "Закончить", style: .default, handler: { _ in
+                self.stop()
+            }))
+            alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { _ in return}))
+            self.present(alert, animated: true)
+        }
+        polyline?.map = mapView
+        path = previousPath
+        polyline?.path = path
+        
+        if let previousPath = previousPath {
+            let bounds = GMSCoordinateBounds(path: previousPath)
+            let update = GMSCameraUpdate.fit(bounds, withPadding: 50.0)
+            mapView.moveCamera(update)
+        }
+    }
+    
     private func start() {
         locationManager?.startUpdatingLocation()
+        locationManager?.allowsBackgroundLocationUpdates = true
+        
         polyline?.map = nil
         polyline = GMSPolyline()
         polyline?.strokeWidth = 5
@@ -67,6 +102,10 @@ class ViewController: UIViewController {
     
     private func stop() {
         locationManager?.stopUpdatingLocation()
+        locationManager?.allowsBackgroundLocationUpdates = false
+        
+        polyline?.map = nil
+        path = nil
         
         do {
             let realm = try Realm()
@@ -80,6 +119,7 @@ class ViewController: UIViewController {
             } else {
                 path[0].encodedPath = self.path?.encodedPath()
             }
+            previousPath = self.path
             try realm.commitWrite()
         } catch {
             print(error)
@@ -113,7 +153,7 @@ extension ViewController: CLLocationManagerDelegate {
         path?.add(location.coordinate)
         polyline?.path = path
         
-        let camera = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 15)
+        let camera = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 17)
 //        mapView.camera = camera
 //        addMarker(coordinate: location.coordinate)
         mapView.animate(to: camera)

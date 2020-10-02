@@ -20,6 +20,20 @@
                                 <rect key="frame" x="0.0" y="0.0" width="413" height="1240"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gobackward" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="cR7-7o-mNs">
+                                <rect key="frame" x="350" y="52.5" width="40" height="41"/>
+                                <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="cR7-7o-mNs" secondAttribute="height" multiplier="1:1" id="IOX-Lw-oxy"/>
+                                    <constraint firstAttribute="width" constant="40" id="xjS-uY-h8f"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1YE-fJ-sgL">
+                                <rect key="frame" x="350" y="54" width="40" height="40"/>
+                                <connections>
+                                    <action selector="clickPreviousPath:" destination="BYZ-38-t0r" eventType="touchUpInside" id="khF-5A-t5D"/>
+                                </connections>
+                            </button>
                             <view contentMode="scaleToFill" id="ZDF-L4-YAv">
                                 <rect key="frame" x="141" y="754" width="131" height="116"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -63,8 +77,14 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="YZ9-8P-8CT" firstAttribute="centerX" secondItem="ZDF-L4-YAv" secondAttribute="centerX" id="FkF-Vg-ecT"/>
+                            <constraint firstItem="1YE-fJ-sgL" firstAttribute="centerY" secondItem="cR7-7o-mNs" secondAttribute="centerY" id="Fnn-zd-d51"/>
+                            <constraint firstItem="1YE-fJ-sgL" firstAttribute="height" secondItem="cR7-7o-mNs" secondAttribute="height" id="H7Q-DR-ho8"/>
                             <constraint firstItem="YZ9-8P-8CT" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="LtI-gi-Ny1"/>
                             <constraint firstItem="ZDF-L4-YAv" firstAttribute="top" secondItem="YZ9-8P-8CT" secondAttribute="bottom" constant="-486" id="P21-xK-B7c"/>
+                            <constraint firstItem="1YE-fJ-sgL" firstAttribute="centerX" secondItem="cR7-7o-mNs" secondAttribute="centerX" id="Sqg-JZ-JCp"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="cR7-7o-mNs" secondAttribute="trailing" constant="24" id="Suy-8e-T4y"/>
+                            <constraint firstItem="cR7-7o-mNs" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="pO3-1x-tni"/>
+                            <constraint firstItem="1YE-fJ-sgL" firstAttribute="width" secondItem="cR7-7o-mNs" secondAttribute="width" id="pRl-IH-MaK"/>
                             <constraint firstItem="YZ9-8P-8CT" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="tdS-Vx-ata"/>
                         </constraints>
                     </view>
@@ -80,6 +100,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="gobackward" catalog="system" width="121" height="128"/>
         <image name="play.fill" catalog="system" width="116" height="128"/>
         <image name="stop.fill" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
