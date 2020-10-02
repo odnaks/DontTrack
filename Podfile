@@ -6,6 +6,7 @@ target 'testMaps' do
   use_frameworks!
   
   pod 'GoogleMaps'
+  pod 'RealmSwift'
   # Pods for testMaps
 
 end

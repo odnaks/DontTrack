@@ -7,6 +7,7 @@
 
 import UIKit
 import GoogleMaps
+import RealmSwift
 
 class ViewController: UIViewController {
     @IBOutlet weak var mapView: GMSMapView!
@@ -66,6 +67,24 @@ class ViewController: UIViewController {
     
     private func stop() {
         locationManager?.stopUpdatingLocation()
+        
+        do {
+            let realm = try Realm()
+            print(realm.configuration.fileURL)
+            let path = realm.objects(PathEntity.self)
+            realm.beginWrite()
+            if path.isEmpty {
+                let firstPath = PathEntity()
+                firstPath.encodedPath = self.path?.encodedPath()
+                realm.add(firstPath)
+            } else {
+                path[0].encodedPath = self.path?.encodedPath()
+            }
+            try realm.commitWrite()
+        } catch {
+            print(error)
+        }
+
     }
     
     private func configureLocationManager() {
