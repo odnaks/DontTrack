@@ -67,16 +67,7 @@ class ViewController: UIViewController {
         updateButton()
     }
     
-    @IBAction func clickPreviousPath(_ sender: Any) {
-        if isRunning {
-            let alert = UIAlertController(title: "Закончить трек?", message: "Чтобы посмотреть предыдущий трек, необходимо завершить текущий.", preferredStyle: .alert)
-
-            alert.addAction(UIAlertAction(title: "Закончить", style: .default, handler: { _ in
-                self.stop()
-            }))
-            alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { _ in return}))
-            self.present(alert, animated: true)
-        }
+    private func downloadPreviousPath() {
         polyline?.map = mapView
         path = previousPath
         polyline?.path = path
@@ -85,6 +76,23 @@ class ViewController: UIViewController {
             let bounds = GMSCoordinateBounds(path: previousPath)
             let update = GMSCameraUpdate.fit(bounds, withPadding: 50.0)
             mapView.moveCamera(update)
+        }
+    }
+    
+    @IBAction func clickPreviousPath(_ sender: Any) {
+        if isRunning {
+            let alert = UIAlertController(title: "Закончить трек?", message: "Чтобы посмотреть предыдущий трек, необходимо завершить текущий.", preferredStyle: .alert)
+
+            alert.addAction(UIAlertAction(title: "Закончить", style: .default, handler: { _ in
+                self.stop()
+                self.isRunning = false
+                self.updateButton()
+                self.downloadPreviousPath()
+            }))
+            alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { _ in return}))
+            self.present(alert, animated: true)
+        } else {
+            downloadPreviousPath()
         }
     }
     
