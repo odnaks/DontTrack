@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,6 +14,7 @@
 		F08C9867251E49A200CFC170 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F08C9865251E49A200CFC170 /* Main.storyboard */; };
 		F08C9869251E49A400CFC170 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F08C9868251E49A400CFC170 /* Assets.xcassets */; };
 		F08C986C251E49A400CFC170 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F08C986A251E49A400CFC170 /* LaunchScreen.storyboard */; };
+		F0923A3F2526C96A005E1E64 /* PathEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0923A3E2526C96A005E1E64 /* PathEntity.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		F08C9868251E49A400CFC170 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F08C986B251E49A400CFC170 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F08C986D251E49A400CFC170 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F0923A3E2526C96A005E1E64 /* PathEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathEntity.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 				F08C985F251E49A200CFC170 /* AppDelegate.swift */,
 				F08C9861251E49A200CFC170 /* SceneDelegate.swift */,
 				F08C9863251E49A200CFC170 /* ViewController.swift */,
+				F0923A3E2526C96A005E1E64 /* PathEntity.swift */,
 				F08C9865251E49A200CFC170 /* Main.storyboard */,
 				F08C9868251E49A400CFC170 /* Assets.xcassets */,
 				F08C986A251E49A400CFC170 /* LaunchScreen.storyboard */,
@@ -88,7 +91,6 @@
 				2D46D789F3D774595F579F6E /* Pods-testMaps.debug.xcconfig */,
 				D2C242C1F4B1A3A9A7885612 /* Pods-testMaps.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -104,6 +106,7 @@
 				F08C9859251E49A200CFC170 /* Frameworks */,
 				F08C985A251E49A200CFC170 /* Resources */,
 				A6E7655A3F5F01241A6258EC /* [CP] Copy Pods Resources */,
+				40D6F3F4184E15E05EFEA6B2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -182,6 +185,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		40D6F3F4184E15E05EFEA6B2 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-testMaps/Pods-testMaps-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-testMaps/Pods-testMaps-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-testMaps/Pods-testMaps-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		A6E7655A3F5F01241A6258EC /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -207,6 +227,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F08C9864251E49A200CFC170 /* ViewController.swift in Sources */,
+				F0923A3F2526C96A005E1E64 /* PathEntity.swift in Sources */,
 				F08C9860251E49A200CFC170 /* AppDelegate.swift in Sources */,
 				F08C9862251E49A200CFC170 /* SceneDelegate.swift in Sources */,
 			);
