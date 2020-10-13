@@ -12,7 +12,13 @@ import RealmSwift
 class ViewController: UIViewController {
     @IBOutlet weak var mapView: GMSMapView!
     
-    private var locationManager: CLLocationManager?
+//    private var locationManager: CLLocationManager?
+    
+    // Центр Москвы
+    let coordinate = CLLocationCoordinate2D(latitude: 59.939095, longitude: 30.315868)
+
+    
+    let locationManager = LocationManager.instance
     private var previousPath: GMSMutablePath?
     
     @IBOutlet weak var playImage: UIImageView!
@@ -26,8 +32,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configureMap()
         configureLocationManager()
-        locationManager?.delegate = self
+        
+//        locationManager?.delegate = self
         
         do {
             let realm = try Realm()
@@ -42,6 +50,14 @@ class ViewController: UIViewController {
         
         updateButton()
     }
+    
+    func configureMap() {
+    // Создаём камеру с использованием координат и уровнем увеличения
+            let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
+    // Устанавливаем камеру для карты
+            mapView.camera = camera
+        }
+
     
     override func viewDidAppear(_ animated: Bool) {
         updateButton()
@@ -97,8 +113,10 @@ class ViewController: UIViewController {
     }
     
     private func start() {
-        locationManager?.startUpdatingLocation()
-        locationManager?.allowsBackgroundLocationUpdates = true
+//        locationManager?.startUpdatingLocation()
+//        locationManager?.allowsBackgroundLocationUpdates = true
+        
+        locationManager.startUpdatingLocation()
         
         polyline?.map = nil
         polyline = GMSPolyline()
@@ -109,8 +127,9 @@ class ViewController: UIViewController {
     }
     
     private func stop() {
-        locationManager?.stopUpdatingLocation()
-        locationManager?.allowsBackgroundLocationUpdates = false
+//        locationManager?.stopUpdatingLocation()
+//        locationManager?.allowsBackgroundLocationUpdates = false
+        locationManager.stopUpdatingLocation()
         
         polyline?.map = nil
         path = nil
@@ -135,35 +154,53 @@ class ViewController: UIViewController {
 
     }
     
-    private func configureLocationManager() {
-        locationManager = CLLocationManager()
-        locationManager?.delegate = self
-//        locationManager?.requestWhenInUseAuthorization()
-        locationManager?.allowsBackgroundLocationUpdates = true
-        locationManager?.pausesLocationUpdatesAutomatically = false
-        locationManager?.startMonitoringSignificantLocationChanges()
-        locationManager?.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager?.requestAlwaysAuthorization()
-//        locationManager?.startUpdatingLocation()
+    func configureLocationManager() {
+            locationManager
+                .location
+                .asObservable()
+                .bind { [weak self] location in
+                    guard let location = location else { return }
+                    self?.path?.add(location.coordinate)
+    // Обновляем путь у линии маршрута путём повторного присвоения
+                    self?.polyline?.path = self?.path
+                    
+    // Чтобы наблюдать за движением, установим камеру на только что добавленную
+    // точку
+                    let position = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 17)
+                    self?.mapView.animate(to: position)
+                }
     }
+
     
-    private func addMarker(coordinate: CLLocationCoordinate2D) {
-        let marker = GMSMarker(position: coordinate)
-        marker.map = mapView
-    }
+//    private func configureLocationManager() {
+//        locationManager = CLLocationManager()
+//        locationManager?.delegate = self
+////        locationManager?.requestWhenInUseAuthorization()
+//        locationManager?.allowsBackgroundLocationUpdates = true
+//        locationManager?.pausesLocationUpdatesAutomatically = false
+//        locationManager?.startMonitoringSignificantLocationChanges()
+//        locationManager?.desiredAccuracy = kCLLocationAccuracyBest
+//        locationManager?.requestAlwaysAuthorization()
+////        locationManager?.startUpdatingLocation()
+//    }
+    
+//    private func addMarker(coordinate: CLLocationCoordinate2D) {
+//        let marker = GMSMarker(position: coordinate)
+//        marker.map = mapView
+//    }
 }
 
-extension ViewController: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-        guard let location = locations.last else {return}
-        
-        path?.add(location.coordinate)
-        polyline?.path = path
-        
-        let camera = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 17)
-//        mapView.camera = camera
-//        addMarker(coordinate: location.coordinate)
-        mapView.animate(to: camera)
-    }
-}
+//extension ViewController: CLLocationManagerDelegate {
+//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+//
+//        guard let location = locations.last else {return}
+//
+//        path?.add(location.coordinate)
+//        polyline?.path = path
+//
+//        let camera = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 17)
+////        mapView.camera = camera
+////        addMarker(coordinate: location.coordinate)
+//        mapView.animate(to: camera)
+//    }
+//}
