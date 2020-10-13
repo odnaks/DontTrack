@@ -16,6 +16,20 @@ class AuthViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        passwordField.autocorrectionType = .no
+        loginField.autocorrectionType = .no
+        
+//        let blurredView = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
+//        blurredView.frame = self.view.bounds
+//        self.view.addSubview(blurredView)
+    }
+    
+    func blurOn() {
+        
+    }
+    
+    func blurOff() {
+        
     }
     
     @IBAction func clickButtonLogin(_ sender: Any) {
