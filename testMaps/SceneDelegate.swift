@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -33,14 +34,66 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
     }
 
+    private func makeNotificationContent() -> UNNotificationContent {
+        let content = UNMutableNotificationContent()
+        content.title = "hello"
+        content.subtitle = "возвращайся в приложение"
+        content.body = "ты еще не успел построить свой маршрут"
+        // Цифра в бейдже на иконке
+        content.badge = 777
+        return content
+    }
+    
+    private func makeIntervalNotificatioTrigger() -> UNNotificationTrigger {
+        return UNTimeIntervalNotificationTrigger(
+            timeInterval: 30,
+            repeats: false
+        )
+    }
+    
+    private func sendNotificatioRequest(
+            content: UNNotificationContent,
+            trigger: UNNotificationTrigger) {
+            
+        let request = UNNotificationRequest(
+            identifier: "hello",
+            content: content,
+            trigger: trigger
+        )
+        
+        let center = UNUserNotificationCenter.current()
+        center.add(request) { error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
     func sceneWillResignActive(_ scene: UIScene) {
         
+        //blue view
         let blurredView = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
         guard let window = window else {return}
         blurredView.frame = window.frame
         blurredView.tag = 2905
         
         self.window?.addSubview(blurredView)
+        
+        //call notification
+        let center = UNUserNotificationCenter.current()
+        center.getNotificationSettings { [unowned self] settings in
+            switch settings.authorizationStatus {
+                case .authorized:
+                    print("Разрешение есть")
+                    self.sendNotificatioRequest(content: self.makeNotificationContent(),
+                                                 trigger: self.makeIntervalNotificatioTrigger())
+                case .denied:
+                    print("Разрешения нет")
+                default:
+                    break
+            }
+        }
+        
         // Called when the scene will move from an active state to an inactive state.
         // This may occur due to temporary interruptions (ex. an incoming phone call).
     }
