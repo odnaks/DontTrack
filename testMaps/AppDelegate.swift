@@ -7,6 +7,7 @@
 
 import UIKit
 import GoogleMaps
+//import RxSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,6 +15,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         GMSServices.provideAPIKey("AIzaSyAIfvW3lAcGTSNn3z_WHTA58KctfEr4HrU")
+        
+        
+//        var array = [1, 2, 3, 4, 5]
+//        let obserable = Observable<Int>.from(array)
+//
+//        _ = obserable.subscribe(onNext: { (event) in
+//            print(event)
+//        }, onError: { error in
+//            print(error)
+//        }, onCompleted: {
+//            print("done")
+//        })
+//
+//        array
+        
+        
+        
         return true
     }
 

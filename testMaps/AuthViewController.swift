@@ -7,12 +7,16 @@
 
 import UIKit
 import RealmSwift
+import RxSwift
+import RxCocoa
 
 class AuthViewController: UIViewController {
 
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var loginField: UITextField!
-
+    @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var regButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -22,15 +26,30 @@ class AuthViewController: UIViewController {
 //        let blurredView = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
 //        blurredView.frame = self.view.bounds
 //        self.view.addSubview(blurredView)
+        loginButton?.isEnabled = false
+        regButton?.isEnabled = false
+        configureLoginBindings()
     }
     
-    func blurOn() {
-        
-    }
     
-    func blurOff() {
-        
+    func configureLoginBindings() {
+            Observable
+    // Объединяем два обсервера в один
+                .combineLatest(
+                    loginField.rx.text,
+                    passwordField.rx.text
+                )
+                .map { login, password in
+                    return !(login ?? "").isEmpty && (password ?? "").count >= 6
+                }
+//    // Подписываемся на получение событий
+                .bind { [weak loginButton, weak regButton] inputFilled in
+//    // Если событие означает успех, активируем кнопку, иначе деактивируем
+                    loginButton?.isEnabled = inputFilled
+                    regButton?.isEnabled = inputFilled
+            }
     }
+
     
     @IBAction func clickButtonLogin(_ sender: Any) {
         print("LOGIN CLICK")
@@ -65,6 +84,7 @@ class AuthViewController: UIViewController {
         let ok = UIAlertAction(title: "OK", style: .default, handler: {_ in
             return
         })
+        vc.addAction(ok)
         self.show(vc, sender: nil)
     }
     

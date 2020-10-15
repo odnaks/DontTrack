@@ -7,6 +7,8 @@ target 'testMaps' do
   
   pod 'GoogleMaps'
   pod 'RealmSwift'
+  pod 'RxSwift'
+  pod 'RxCocoa'
   # Pods for testMaps
 
 end
