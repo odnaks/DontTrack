@@ -15,22 +15,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         GMSServices.provideAPIKey("AIzaSyAIfvW3lAcGTSNn3z_WHTA58KctfEr4HrU")
-        
-        
-//        var array = [1, 2, 3, 4, 5]
-//        let obserable = Observable<Int>.from(array)
-//
-//        _ = obserable.subscribe(onNext: { (event) in
-//            print(event)
-//        }, onError: { error in
-//            print(error)
-//        }, onCompleted: {
-//            print("done")
-//        })
-//
-//        array
-        
-        
+
+        let center = UNUserNotificationCenter.current()
+        center.getNotificationSettings { settings in
+            switch settings.authorizationStatus {
+                case .authorized:
+                   print("Разрешение есть")
+                case .denied:
+                   print("Разрешения нет")
+                default:
+                    center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+                        if granted {
+                            print("Разрешение получено")
+                        } else {
+                            print("Разрешение не получено")
+                        }
+                    }
+            }
+        }
         
         return true
     }
