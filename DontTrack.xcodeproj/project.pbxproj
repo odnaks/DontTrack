@@ -29,7 +29,7 @@
 		F04D7E77252C9159002C0322 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		F04D7E7A252C9237002C0322 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		F04D7EEA2535C7E8002C0322 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
-		F08C985C251E49A200CFC170 /* testMaps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = testMaps.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F08C985C251E49A200CFC170 /* DontTrack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DontTrack.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F08C985F251E49A200CFC170 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F08C9861251E49A200CFC170 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		F08C9863251E49A200CFC170 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -73,7 +73,7 @@
 		F08C985D251E49A200CFC170 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F08C985C251E49A200CFC170 /* testMaps.app */,
+				F08C985C251E49A200CFC170 /* DontTrack.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -109,9 +109,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F08C985B251E49A200CFC170 /* testMaps */ = {
+		F08C985B251E49A200CFC170 /* DontTrack */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F08C9870251E49A400CFC170 /* Build configuration list for PBXNativeTarget "testMaps" */;
+			buildConfigurationList = F08C9870251E49A400CFC170 /* Build configuration list for PBXNativeTarget "DontTrack" */;
 			buildPhases = (
 				2719E4C39D0E9C8365898FA7 /* [CP] Check Pods Manifest.lock */,
 				F08C9858251E49A200CFC170 /* Sources */,
@@ -124,9 +124,9 @@
 			);
 			dependencies = (
 			);
-			name = testMaps;
+			name = DontTrack;
 			productName = testMaps;
-			productReference = F08C985C251E49A200CFC170 /* testMaps.app */;
+			productReference = F08C985C251E49A200CFC170 /* DontTrack.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -143,7 +143,7 @@
 					};
 				};
 			};
-			buildConfigurationList = F08C9857251E49A200CFC170 /* Build configuration list for PBXProject "testMaps" */;
+			buildConfigurationList = F08C9857251E49A200CFC170 /* Build configuration list for PBXProject "DontTrack" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -156,7 +156,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F08C985B251E49A200CFC170 /* testMaps */,
+				F08C985B251E49A200CFC170 /* DontTrack */,
 			);
 		};
 /* End PBXProject section */
@@ -432,7 +432,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F08C9857251E49A200CFC170 /* Build configuration list for PBXProject "testMaps" */ = {
+		F08C9857251E49A200CFC170 /* Build configuration list for PBXProject "DontTrack" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F08C986E251E49A400CFC170 /* Debug */,
@@ -441,7 +441,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F08C9870251E49A400CFC170 /* Build configuration list for PBXNativeTarget "testMaps" */ = {
+		F08C9870251E49A400CFC170 /* Build configuration list for PBXNativeTarget "DontTrack" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F08C9871251E49A400CFC170 /* Debug */,
