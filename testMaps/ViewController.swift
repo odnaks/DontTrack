@@ -12,7 +12,8 @@ import RealmSwift
 class ViewController: UIViewController {
     @IBOutlet weak var mapView: GMSMapView!
     
-//    private var locationManager: CLLocationManager?
+    @IBOutlet weak var profileImageView: UIImageView!
+    //    private var locationManager: CLLocationManager?
     
     // Центр Москвы
     let coordinate = CLLocationCoordinate2D(latitude: 59.939095, longitude: 30.315868)
@@ -36,7 +37,6 @@ class ViewController: UIViewController {
         configureLocationManager()
         
 //        locationManager?.delegate = self
-        
         do {
             let realm = try Realm()
             print(realm.configuration.fileURL)
@@ -52,13 +52,38 @@ class ViewController: UIViewController {
     }
     
     func configureMap() {
-    // Создаём камеру с использованием координат и уровнем увеличения
-            let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
-    // Устанавливаем камеру для карты
-            mapView.camera = camera
+        let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
+        mapView.camera = camera
+        do {
+              // Set the map style by passing the URL of the local file.
+          if let styleURL = Bundle.main.url(forResource: "style", withExtension: "json") {
+            mapView.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
+          } else {
+            NSLog("Unable to find style.json")
+          }
+        } catch {
+          NSLog("One or more of the map styles failed to load. \(error)")
         }
-
+    }
     
+    func configureLocationManager() {
+        locationManager
+            .location
+            .asObservable()
+            .bind { [weak self] location in
+                guard let location = location else { return }
+                self?.path?.add(location.coordinate)
+                // Обновляем путь у линии маршрута путём повторного присвоения
+                self?.polyline?.path = self?.path
+                
+                // Чтобы наблюдать за движением, установим камеру на только что добавленную
+                // точку
+                let position = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 17)
+                self?.mapView.animate(to: position)
+            }
+        locationManager.mapView = self.mapView
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         updateButton()
     }
@@ -85,13 +110,17 @@ class ViewController: UIViewController {
     
     private func downloadPreviousPath() {
         polyline?.map = mapView
-        path = previousPath
-        polyline?.path = path
+//        path = previousPath
+        polyline?.path = previousPath
         
         if let previousPath = previousPath {
             let bounds = GMSCoordinateBounds(path: previousPath)
             let update = GMSCameraUpdate.fit(bounds, withPadding: 50.0)
             mapView.moveCamera(update)
+            let count = previousPath.count()
+            if count > 0 {
+                locationManager.addMarker(coordinate: previousPath.coordinate(at: count - 1))
+            }
         }
     }
     
@@ -112,6 +141,16 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func clickSetProfileImage(_ sender: Any) {
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else { return }
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.sourceType = .camera
+        imagePickerController.allowsEditing = true
+        imagePickerController.delegate = self
+                
+        present(imagePickerController, animated: true)
+    }
+    
     private func start() {
 //        locationManager?.startUpdatingLocation()
 //        locationManager?.allowsBackgroundLocationUpdates = true
@@ -121,7 +160,7 @@ class ViewController: UIViewController {
         polyline?.map = nil
         polyline = GMSPolyline()
         polyline?.strokeWidth = 5
-        polyline?.strokeColor = .red
+        polyline?.strokeColor = UIColor(red: 0.387, green: 0.502, blue: 0.899, alpha: 1.0)
         polyline?.map = mapView
         path = GMSMutablePath()
     }
@@ -130,9 +169,6 @@ class ViewController: UIViewController {
 //        locationManager?.stopUpdatingLocation()
 //        locationManager?.allowsBackgroundLocationUpdates = false
         locationManager.stopUpdatingLocation()
-        
-        polyline?.map = nil
-        path = nil
         
         do {
             let realm = try Realm()
@@ -146,61 +182,34 @@ class ViewController: UIViewController {
             } else {
                 path[0].encodedPath = self.path?.encodedPath()
             }
-            previousPath = self.path
             try realm.commitWrite()
         } catch {
             print(error)
         }
+        
+        previousPath = self.path
+        polyline?.map = nil
+        path = nil
 
     }
     
-    func configureLocationManager() {
-            locationManager
-                .location
-                .asObservable()
-                .bind { [weak self] location in
-                    guard let location = location else { return }
-                    self?.path?.add(location.coordinate)
-    // Обновляем путь у линии маршрута путём повторного присвоения
-                    self?.polyline?.path = self?.path
-                    
-    // Чтобы наблюдать за движением, установим камеру на только что добавленную
-    // точку
-                    let position = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 17)
-                    self?.mapView.animate(to: position)
-                }
-    }
-
-    
-//    private func configureLocationManager() {
-//        locationManager = CLLocationManager()
-//        locationManager?.delegate = self
-////        locationManager?.requestWhenInUseAuthorization()
-//        locationManager?.allowsBackgroundLocationUpdates = true
-//        locationManager?.pausesLocationUpdatesAutomatically = false
-//        locationManager?.startMonitoringSignificantLocationChanges()
-//        locationManager?.desiredAccuracy = kCLLocationAccuracyBest
-//        locationManager?.requestAlwaysAuthorization()
-////        locationManager?.startUpdatingLocation()
-//    }
-    
-//    private func addMarker(coordinate: CLLocationCoordinate2D) {
-//        let marker = GMSMarker(position: coordinate)
-//        marker.map = mapView
-//    }
 }
 
-//extension ViewController: CLLocationManagerDelegate {
-//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-//
-//        guard let location = locations.last else {return}
-//
-//        path?.add(location.coordinate)
-//        polyline?.path = path
-//
-//        let camera = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 17)
-////        mapView.camera = camera
-////        addMarker(coordinate: location.coordinate)
-//        mapView.animate(to: camera)
-//    }
-//}
+extension ViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        // Если нажали на кнопку Отмена, то UIImagePickerController надо закрыть
+        picker.dismiss(animated: true)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+        locationManager.photoImage = image
+        profileImageView.layer.cornerRadius = profileImageView.frame.height / 2.0
+        profileImageView.layer.masksToBounds = true
+        profileImageView.contentMode = .scaleAspectFill
+        profileImageView.image = image
+        picker.dismiss(animated: true)
+    }
+    
+}
