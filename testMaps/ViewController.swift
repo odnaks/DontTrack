@@ -12,7 +12,8 @@ import RealmSwift
 class ViewController: UIViewController {
     @IBOutlet weak var mapView: GMSMapView!
     
-//    private var locationManager: CLLocationManager?
+    @IBOutlet weak var profileImageView: UIImageView!
+    //    private var locationManager: CLLocationManager?
     
     // Центр Москвы
     let coordinate = CLLocationCoordinate2D(latitude: 59.939095, longitude: 30.315868)
@@ -109,15 +110,17 @@ class ViewController: UIViewController {
     
     private func downloadPreviousPath() {
         polyline?.map = mapView
-        path = previousPath
-        polyline?.path = path
+//        path = previousPath
+        polyline?.path = previousPath
         
         if let previousPath = previousPath {
             let bounds = GMSCoordinateBounds(path: previousPath)
             let update = GMSCameraUpdate.fit(bounds, withPadding: 50.0)
             mapView.moveCamera(update)
-//            let count = previousPath.count()
-//            locationManager.addMarker(coordinate: previousPath.coordinate(at: count - 1))
+            let count = previousPath.count()
+            if count > 0 {
+                locationManager.addMarker(coordinate: previousPath.coordinate(at: count - 1))
+            }
         }
     }
     
@@ -157,7 +160,7 @@ class ViewController: UIViewController {
         polyline?.map = nil
         polyline = GMSPolyline()
         polyline?.strokeWidth = 5
-        polyline?.strokeColor = .red
+        polyline?.strokeColor = UIColor(red: 0.387, green: 0.502, blue: 0.899, alpha: 1.0)
         polyline?.map = mapView
         path = GMSMutablePath()
     }
@@ -202,6 +205,10 @@ extension ViewController: UINavigationControllerDelegate, UIImagePickerControlle
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
         locationManager.photoImage = image
+        profileImageView.layer.cornerRadius = profileImageView.frame.height / 2.0
+        profileImageView.layer.masksToBounds = true
+        profileImageView.contentMode = .scaleAspectFill
+        profileImageView.image = image
         picker.dismiss(animated: true)
     }
     
