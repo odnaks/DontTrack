@@ -56,9 +56,26 @@ class ViewController: UIViewController {
             let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
     // Устанавливаем камеру для карты
             mapView.camera = camera
-        }
-
+    }
     
+    func configureLocationManager() {
+        locationManager
+            .location
+            .asObservable()
+            .bind { [weak self] location in
+                guard let location = location else { return }
+                self?.path?.add(location.coordinate)
+                // Обновляем путь у линии маршрута путём повторного присвоения
+                self?.polyline?.path = self?.path
+                
+                // Чтобы наблюдать за движением, установим камеру на только что добавленную
+                // точку
+                let position = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 17)
+                self?.mapView.animate(to: position)
+            }
+        locationManager.mapView = self.mapView
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         updateButton()
     }
@@ -111,6 +128,21 @@ class ViewController: UIViewController {
             downloadPreviousPath()
         }
     }
+    @IBOutlet weak var TMPImage: UIImageView!
+    
+    @IBAction func clickSetProfileImage(_ sender: Any) {
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else { return }
+        let imagePickerController = UIImagePickerController()
+        // Источник изображений: камера
+                imagePickerController.sourceType = .camera
+        // Изображение можно редактировать
+                imagePickerController.allowsEditing = true
+                imagePickerController.delegate = self
+                
+        // Показываем контроллер
+                present(imagePickerController, animated: true)
+
+    }
     
     private func start() {
 //        locationManager?.startUpdatingLocation()
@@ -154,53 +186,37 @@ class ViewController: UIViewController {
 
     }
     
-    func configureLocationManager() {
-            locationManager
-                .location
-                .asObservable()
-                .bind { [weak self] location in
-                    guard let location = location else { return }
-                    self?.path?.add(location.coordinate)
-    // Обновляем путь у линии маршрута путём повторного присвоения
-                    self?.polyline?.path = self?.path
-                    
-    // Чтобы наблюдать за движением, установим камеру на только что добавленную
-    // точку
-                    let position = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 17)
-                    self?.mapView.animate(to: position)
-                }
-    }
-
-    
-//    private func configureLocationManager() {
-//        locationManager = CLLocationManager()
-//        locationManager?.delegate = self
-////        locationManager?.requestWhenInUseAuthorization()
-//        locationManager?.allowsBackgroundLocationUpdates = true
-//        locationManager?.pausesLocationUpdatesAutomatically = false
-//        locationManager?.startMonitoringSignificantLocationChanges()
-//        locationManager?.desiredAccuracy = kCLLocationAccuracyBest
-//        locationManager?.requestAlwaysAuthorization()
-////        locationManager?.startUpdatingLocation()
-//    }
-    
-//    private func addMarker(coordinate: CLLocationCoordinate2D) {
-//        let marker = GMSMarker(position: coordinate)
-//        marker.map = mapView
-//    }
 }
 
-//extension ViewController: CLLocationManagerDelegate {
-//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-//
-//        guard let location = locations.last else {return}
-//
-//        path?.add(location.coordinate)
-//        polyline?.path = path
-//
-//        let camera = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 17)
-////        mapView.camera = camera
-////        addMarker(coordinate: location.coordinate)
-//        mapView.animate(to: camera)
-//    }
-//}
+extension ViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+// Если нажали на кнопку Отмена, то UIImagePickerController надо закрыть
+        picker.dismiss(animated: true)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        //// Мы получили медиа от контроллера
+        //// Изображение надо достать из словаря info
+        let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+        print(image!)
+// Закрываем UIImagePickerController
+//        TMPImage.image = image
+        locationManager.photoImage = image
+        picker.dismiss(animated: true)
+    }
+    
+// Метод, извлекающий изображение
+    private func extractImage(from info: [String: Any]) -> UIImage? {
+// Пытаемся извлечь отредактированное изображение
+        if let image = info[UIImagePickerController.InfoKey.editedImage.rawValue] as? UIImage {
+            return image
+// Пытаемся извлечь оригинальное
+        } else if let image = info[UIImagePickerController.InfoKey.originalImage.rawValue] as? UIImage {
+            return image
+        } else {
+// Если изображение не получено, возвращаем nil
+            return nil
+        }
+    }
+}

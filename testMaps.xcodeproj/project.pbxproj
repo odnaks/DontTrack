@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2E6748AF560564BBDF5A3505 /* Pods_testMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B07B541DF47920803B6998BC /* Pods_testMaps.framework */; };
+		F01C022C253E6EDE00A0CFF5 /* MarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01C022B253E6EDE00A0CFF5 /* MarkerView.swift */; };
+		F01C022F253E6F3900A0CFF5 /* MarkerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F01C022E253E6F3900A0CFF5 /* MarkerView.xib */; };
 		F04D7E78252C9159002C0322 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04D7E77252C9159002C0322 /* User.swift */; };
 		F04D7E7B252C9237002C0322 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04D7E7A252C9237002C0322 /* AuthViewController.swift */; };
 		F04D7EEB2535C7E9002C0322 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04D7EEA2535C7E8002C0322 /* LocationManager.swift */; };
@@ -24,6 +26,8 @@
 		2D46D789F3D774595F579F6E /* Pods-testMaps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-testMaps.debug.xcconfig"; path = "Target Support Files/Pods-testMaps/Pods-testMaps.debug.xcconfig"; sourceTree = "<group>"; };
 		B07B541DF47920803B6998BC /* Pods_testMaps.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_testMaps.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2C242C1F4B1A3A9A7885612 /* Pods-testMaps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-testMaps.release.xcconfig"; path = "Target Support Files/Pods-testMaps/Pods-testMaps.release.xcconfig"; sourceTree = "<group>"; };
+		F01C022B253E6EDE00A0CFF5 /* MarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerView.swift; sourceTree = "<group>"; };
+		F01C022E253E6F3900A0CFF5 /* MarkerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MarkerView.xib; sourceTree = "<group>"; };
 		F04D7E77252C9159002C0322 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		F04D7E7A252C9237002C0322 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		F04D7EEA2535C7E8002C0322 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -86,6 +90,8 @@
 				F04D7E77252C9159002C0322 /* User.swift */,
 				F04D7E7A252C9237002C0322 /* AuthViewController.swift */,
 				F04D7EEA2535C7E8002C0322 /* LocationManager.swift */,
+				F01C022B253E6EDE00A0CFF5 /* MarkerView.swift */,
+				F01C022E253E6F3900A0CFF5 /* MarkerView.xib */,
 				F08C9865251E49A200CFC170 /* Main.storyboard */,
 				F08C9868251E49A400CFC170 /* Assets.xcassets */,
 				F08C986A251E49A400CFC170 /* LaunchScreen.storyboard */,
@@ -163,6 +169,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F01C022F253E6F3900A0CFF5 /* MarkerView.xib in Resources */,
 				F08C986C251E49A400CFC170 /* LaunchScreen.storyboard in Resources */,
 				F08C9869251E49A400CFC170 /* Assets.xcassets in Resources */,
 				F08C9867251E49A200CFC170 /* Main.storyboard in Resources */,
@@ -235,6 +242,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F01C022C253E6EDE00A0CFF5 /* MarkerView.swift in Sources */,
 				F08C9864251E49A200CFC170 /* ViewController.swift in Sources */,
 				F0923A3F2526C96A005E1E64 /* PathEntity.swift in Sources */,
 				F08C9860251E49A200CFC170 /* AppDelegate.swift in Sources */,
