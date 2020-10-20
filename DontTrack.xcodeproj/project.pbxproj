@@ -63,7 +63,7 @@
 		F08C9853251E49A200CFC170 = {
 			isa = PBXGroup;
 			children = (
-				F08C985E251E49A200CFC170 /* testMaps */,
+				F08C985E251E49A200CFC170 /* DontTrack */,
 				F08C985D251E49A200CFC170 /* Products */,
 				F444384B770CD05C14BB7519 /* Pods */,
 				D5C0B5CC7DBD673FB03C42E4 /* Frameworks */,
@@ -78,7 +78,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		F08C985E251E49A200CFC170 /* testMaps */ = {
+		F08C985E251E49A200CFC170 /* DontTrack */ = {
 			isa = PBXGroup;
 			children = (
 				F08C985F251E49A200CFC170 /* AppDelegate.swift */,
@@ -94,7 +94,7 @@
 				F08C986A251E49A400CFC170 /* LaunchScreen.storyboard */,
 				F08C986D251E49A400CFC170 /* Info.plist */,
 			);
-			path = testMaps;
+			path = DontTrack;
 			sourceTree = "<group>";
 		};
 		F444384B770CD05C14BB7519 /* Pods */ = {
