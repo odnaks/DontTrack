@@ -36,7 +36,6 @@ class ViewController: UIViewController {
         configureLocationManager()
         
 //        locationManager?.delegate = self
-        
         do {
             let realm = try Realm()
             print(realm.configuration.fileURL)
@@ -52,10 +51,18 @@ class ViewController: UIViewController {
     }
     
     func configureMap() {
-    // Создаём камеру с использованием координат и уровнем увеличения
-            let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
-    // Устанавливаем камеру для карты
-            mapView.camera = camera
+        let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 17)
+        mapView.camera = camera
+        do {
+              // Set the map style by passing the URL of the local file.
+          if let styleURL = Bundle.main.url(forResource: "style", withExtension: "json") {
+            mapView.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
+          } else {
+            NSLog("Unable to find style.json")
+          }
+        } catch {
+          NSLog("One or more of the map styles failed to load. \(error)")
+        }
     }
     
     func configureLocationManager() {
@@ -109,6 +116,8 @@ class ViewController: UIViewController {
             let bounds = GMSCoordinateBounds(path: previousPath)
             let update = GMSCameraUpdate.fit(bounds, withPadding: 50.0)
             mapView.moveCamera(update)
+//            let count = previousPath.count()
+//            locationManager.addMarker(coordinate: previousPath.coordinate(at: count - 1))
         }
     }
     
@@ -128,20 +137,15 @@ class ViewController: UIViewController {
             downloadPreviousPath()
         }
     }
-    @IBOutlet weak var TMPImage: UIImageView!
     
     @IBAction func clickSetProfileImage(_ sender: Any) {
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else { return }
         let imagePickerController = UIImagePickerController()
-        // Источник изображений: камера
-                imagePickerController.sourceType = .camera
-        // Изображение можно редактировать
-                imagePickerController.allowsEditing = true
-                imagePickerController.delegate = self
+        imagePickerController.sourceType = .camera
+        imagePickerController.allowsEditing = true
+        imagePickerController.delegate = self
                 
-        // Показываем контроллер
-                present(imagePickerController, animated: true)
-
+        present(imagePickerController, animated: true)
     }
     
     private func start() {
@@ -163,9 +167,6 @@ class ViewController: UIViewController {
 //        locationManager?.allowsBackgroundLocationUpdates = false
         locationManager.stopUpdatingLocation()
         
-        polyline?.map = nil
-        path = nil
-        
         do {
             let realm = try Realm()
             print(realm.configuration.fileURL)
@@ -178,11 +179,14 @@ class ViewController: UIViewController {
             } else {
                 path[0].encodedPath = self.path?.encodedPath()
             }
-            previousPath = self.path
             try realm.commitWrite()
         } catch {
             print(error)
         }
+        
+        previousPath = self.path
+        polyline?.map = nil
+        path = nil
 
     }
     
@@ -191,32 +195,14 @@ class ViewController: UIViewController {
 extension ViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-// Если нажали на кнопку Отмена, то UIImagePickerController надо закрыть
+        // Если нажали на кнопку Отмена, то UIImagePickerController надо закрыть
         picker.dismiss(animated: true)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        //// Мы получили медиа от контроллера
-        //// Изображение надо достать из словаря info
         let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
-        print(image!)
-// Закрываем UIImagePickerController
-//        TMPImage.image = image
         locationManager.photoImage = image
         picker.dismiss(animated: true)
     }
     
-// Метод, извлекающий изображение
-    private func extractImage(from info: [String: Any]) -> UIImage? {
-// Пытаемся извлечь отредактированное изображение
-        if let image = info[UIImagePickerController.InfoKey.editedImage.rawValue] as? UIImage {
-            return image
-// Пытаемся извлечь оригинальное
-        } else if let image = info[UIImagePickerController.InfoKey.originalImage.rawValue] as? UIImage {
-            return image
-        } else {
-// Если изображение не получено, возвращаем nil
-            return nil
-        }
-    }
 }

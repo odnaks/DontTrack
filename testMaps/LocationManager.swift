@@ -55,6 +55,7 @@ final class LocationManager: NSObject {
             markerView.layer.cornerRadius = markerView.frame.height / 2.0
             markerView.layer.masksToBounds = true
             let imageView = UIImageView(frame: rect)
+            imageView.contentMode = .scaleAspectFill
             imageView.image = photoImage
             markerView.addSubview(imageView)
             self.marker?.iconView = markerView
@@ -85,7 +86,7 @@ final class LocationManager: NSObject {
 
 extension LocationManager: CLLocationManagerDelegate {
     
-    private func addMarker(coordinate: CLLocationCoordinate2D){
+    func addMarker(coordinate: CLLocationCoordinate2D){
         //delete old marker
         self.marker?.map = nil
         //add create new
